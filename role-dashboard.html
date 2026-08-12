@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="EventFlow role dashboard demo.">
+  <title>Workspace — EventFlow</title>
+  <link rel="stylesheet" href="css/role-dashboard.css?v=20260811_progress_modal_fix">
+  <link rel="stylesheet" href="css/qr-checkin.css?v=20260811_volunteer_theme">
+</head>
+<body>
+  <div class="role-shell">
+    <header class="role-header">
+      <a href="index.html" class="brand" aria-label="EventFlow home"><span class="brand-mark" aria-hidden="true"></span><span>EventFlow</span></a>
+      <div class="role-user"><span class="avatar" id="userAvatar">EF</span><span><strong id="userName">EventFlow User</strong><small id="userRole">Demo Workspace</small></span><a href="team-login.html" class="logout-link" id="roleLogout">Log out</a></div>
+    </header>
+    <main id="roleApp"></main>
+  </div>
+  <template id="progressReportTemplate">
+    <div class="role-modal-backdrop" data-progress-backdrop>
+      <section class="role-modal" role="dialog" aria-modal="true" aria-labelledby="progressModalTitle">
+        <div class="role-modal__head"><div><h2 id="progressModalTitle">Update Department Progress</h2><p>Share a quick update with your event admin.</p></div><button type="button" class="modal-close" data-close-progress>×</button></div>
+        <form id="progressReportForm">
+          <label class="modal-field"><span>Current Progress</span><div class="percentage-input"><input id="progressPercentage" type="number" min="0" max="100" required><b>%</b></div></label>
+          <label class="modal-field"><span>Progress Update</span><textarea id="progressReportText" rows="5" required placeholder="Contacted 12 colleges and received responses from 8 of them."></textarea></label>
+          <div class="modal-actions"><button type="button" class="button button--ghost" data-close-progress>Cancel</button><button type="submit" class="button">Submit Report</button></div>
+        </form>
+      </section>
+    </div>
+  </template>
+  <template id="volunteerTemplate">
+    <div class="role-main volunteer-main">
+      <section class="volunteer-hero">
+        <span class="volunteer-shape volunteer-shape--sun" aria-hidden="true"></span><span class="volunteer-shape volunteer-shape--loop" aria-hidden="true"></span><span class="volunteer-shape volunteer-shape--dash" aria-hidden="true"></span>
+        <div class="volunteer-hero__copy"><p class="eyebrow">Volunteer workspace</p><h1>Make your<br><span>mark.</span></h1><p>Focus on what matters, keep your team moving, and share progress when it counts.</p></div>
+        <aside class="volunteer-event-brief"><span class="volunteer-event-brief__mark" aria-hidden="true">✦</span><p>You're helping bring to life</p><h2 data-volunteer-field="event-name"></h2><span data-volunteer-field="event-meta"></span><strong data-volunteer-field="department"></strong></aside>
+      </section>
+      <section class="volunteer-pulse" aria-label="Your progress overview"><div><span>Assignments</span><strong data-volunteer-field="task-count"></strong><small>Tasks assigned to you</small></div><div><span>Completed</span><strong data-volunteer-field="completed-count"></strong><small>Steps already finished</small></div><div class="volunteer-pulse__progress"><span>Personal progress</span><strong data-volunteer-field="progress"></strong><div><i data-volunteer-field="personal-progress-track"></i></div><small>Keep the momentum going</small></div></section>
+      <div class="volunteer-scanner-banner">
+        <div class="scanner-banner-copy"><span class="scanner-banner-icon" aria-hidden="true">⬡</span><div><p class="eyebrow">Attendance tool</p><h2>Check-in participants with your camera</h2><p>Scan a participant's QR code to instantly record their attendance in real time.</p></div></div>
+        <button class="button button--scanner" data-action="open-scanner" id="openScannerBtn">📷 Open QR Scanner</button>
+      </div>
+      <section class="volunteer-workspace-grid"><section class="volunteer-card volunteer-card--tasks"><div class="volunteer-section-heading"><div><p class="eyebrow">Your focus</p><h2>Today’s task list</h2></div><span data-volunteer-field="task-remaining"></span></div><div class="list volunteer-task-list" data-volunteer-tasks></div></section><aside class="volunteer-card volunteer-card--team"><p class="eyebrow">Team pulse</p><h2 data-volunteer-field="department"></h2><p class="volunteer-card__meta" data-volunteer-field="event-meta"></p><div class="volunteer-department-progress"><div><span>Department progress</span><strong data-volunteer-field="department-progress"></strong></div><div class="progress__track"><span data-volunteer-field="progress-track"></span></div></div><div class="volunteer-team-note"><span aria-hidden="true">↗</span><p>Small updates keep everyone on track. Add yours when you finish a milestone.</p></div><button class="button button--teal" data-action="update-progress">Update Progress <span>→</span></button></aside></section>
+      <section class="volunteer-activity"><div class="volunteer-section-heading"><div><p class="eyebrow">Your activity</p><h2>Progress notes</h2></div><span class="history-count" data-volunteer-field="report-count"></span></div><div class="progress-report-list" data-volunteer-reports></div></section>
+    </div>
+  </template>
+  <template id="volunteerTaskTemplate"><label class="list-row task-row"><span class="task-check"><input type="checkbox"><span class="task-check__box" aria-hidden="true">✓</span></span><span class="task-copy"><strong data-task-field="title"></strong><small data-task-field="meta"></small></span><span class="tag task-status" data-task-field="status"></span></label></template>
+  <template id="progressReportItemTemplate"><article class="progress-report"><div class="progress-report__head"><div><strong data-report-field="progress"></strong><small data-report-field="date"></small></div><span class="tag" data-report-field="department"></span></div><p data-report-field="text"></p></article></template>
+  <template id="participantWorkspaceTemplate">
+    <div class="role-main participant-main">
+      <div class="participant-top"><div class="participant-welcome"><p class="eyebrow">Welcome back</p><h1>Welcome,<br><span data-participant-field="name"></span>.</h1><p>Discover events, register for them,<br class="participant-desktop-break"> and manage your event passes.</p></div><div data-participant-calendar></div></div>
+      <div class="participant-controls"><nav class="participant-tabs" aria-label="Participant navigation"><button data-participant-action="participant-tab" data-tab="events">All Events</button><button data-participant-action="participant-tab" data-tab="registered">Registered</button></nav><label class="participant-search"><span>Search events</span><span class="participant-search__field"><b aria-hidden="true">⌕</b><input id="participantSearch" type="search" placeholder="Search by event name, category, or venue"></span></label></div>
+      <section class="participant-event-list" data-participant-event-list></section>
+      <section class="participant-registered-list" data-participant-registered-list hidden></section>
+    </div>
+  </template>
+  <template id="participantCalendarTemplate">
+    <section class="participant-calendar" aria-label="Registered event calendar"><div class="participant-calendar__head"><div class="participant-calendar__title"><span class="participant-calendar__icon" aria-hidden="true">▦</span><div><h2>Your Registered Events</h2><strong data-calendar-field="month"></strong></div></div><div class="participant-calendar__controls"><button type="button" data-participant-action="calendar-month" data-direction="-1" aria-label="Previous month">‹</button><button type="button" data-participant-action="calendar-today">Today</button><button type="button" data-participant-action="calendar-month" data-direction="1" aria-label="Next month">›</button></div></div><div class="participant-calendar__weekdays"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div><div class="participant-calendar__grid" data-calendar-grid></div><div class="participant-calendar__legend"><span><i></i>Registered event</span><span><i class="is-today"></i>Today</span></div></section>
+  </template>
+  <template id="participantCalendarDayTemplate"><div class="participant-calendar__day"><span data-calendar-day></span><i aria-label="Registered event" hidden></i></div></template>
+  <template id="participantEventCardTemplate"><article class="participant-event-card" data-participant-action="view-event"><span class="participant-invite-shape participant-invite-shape--one" aria-hidden="true"></span><span class="participant-invite-shape participant-invite-shape--two" aria-hidden="true"></span><span class="participant-invite-seal" aria-hidden="true">✦</span><div class="participant-invite-card__copy"><p class="eyebrow" data-event-field="category"></p><p class="participant-invite-kicker">An invitation to experience</p><h2 data-event-field="name"></h2><p class="participant-event-card__description" data-event-field="description"></p><div class="participant-event-card__meta"><span>▣ <b data-event-field="date"></b></span><span>◷ <b data-event-field="time"></b></span><span>⌖ <b data-event-field="location"></b></span></div></div><button class="button button--ghost participant-invite-button" type="button">Open invitation <span>→</span></button></article></template>
+  <template id="participantPassCardTemplate"><button class="participant-pass registered-pass" data-participant-action="open-registered"><span class="participant-pass__label">EventFlow participant</span><h2 data-pass-field="participant"></h2><p><span data-pass-field="event"></span> · <span data-pass-field="location"></span></p><span class="participant-pass__event" data-pass-field="category"></span><span class="participant-pass__code">Registered</span></button></template>
+  <template id="participantEmptyTemplate"><div class="participant-empty"><h2 data-empty-field="title"></h2><p data-empty-field="text"></p><button class="button" data-empty-action hidden></button></div></template>
+  <template id="participantUnavailableTemplate"><div class="role-main participant-detail-main"><button class="back-link participant-back" data-participant-action="back-workspace">← Back to Events</button><div class="participant-empty"><h2>This event is no longer available.</h2></div></div></template>
+  <template id="participantPublicDetailTemplate">
+    <div class="role-main participant-detail-main"><button class="back-link participant-back" data-participant-action="back-workspace">← Back to Events</button><section class="invitation-shell"><header class="invitation-hero"><span class="invitation-mark" aria-hidden="true">✦</span><p class="invitation-kicker">You’re invited to</p><p class="eyebrow" data-detail-field="category"></p><h1 data-detail-field="name"></h1><p class="invitation-description" data-detail-field="description"></p><span class="invitation-rule" aria-hidden="true"></span><p class="invitation-host">Hosted by <strong data-detail-field="organizer"></strong></p></header><div class="invitation-body"><section class="invitation-details" aria-label="Event details"><div class="invitation-detail"><span class="invitation-detail__icon" aria-hidden="true">▣</span><div><span>Date</span><strong data-detail-field="date"></strong></div></div><div class="invitation-detail"><span class="invitation-detail__icon" aria-hidden="true">◷</span><div><span>Time</span><strong data-detail-field="time"></strong></div></div><div class="invitation-detail"><span class="invitation-detail__icon" aria-hidden="true">⌖</span><div><span>Venue</span><strong data-detail-field="location"></strong></div></div><div class="invitation-detail"><span class="invitation-detail__icon" aria-hidden="true">◌</span><div><span>Timezone</span><strong data-detail-field="timezone"></strong></div></div></section><section class="invitation-about"><div><p class="invitation-section-label">The experience</p><h2>Come be part of it.</h2><p data-detail-field="detailed-description"></p></div><dl class="invitation-contact"><div><dt>Full address</dt><dd data-detail-field="address"></dd></div><div><dt>Organizer</dt><dd data-detail-field="organizer-secondary"></dd></div><div><dt>Contact</dt><dd data-detail-field="contact"></dd></div><div><dt>Website</dt><dd data-detail-field="website"></dd></div></dl></section></div><footer class="invitation-footer"><div><p class="invitation-section-label">Save your spot</p><strong data-detail-field="registration-message"></strong><span data-detail-field="registration-note"></span></div><div class="participant-register-actions"><button class="button" data-participant-action="register-event" data-detail-action="register"></button></div></footer></section></div>
+  </template>
+  <template id="participantRegisteredDetailTemplate">
+    <div class="role-main participant-detail-main"><button class="back-link participant-back" data-participant-action="participant-tab" data-tab="registered">← Registered Events</button><div class="participant-welcome registered-welcome"><p class="eyebrow">Participant workspace</p><h1>Ready for <span data-detail-field="name"></span>.</h1><p>Your event details and access pass, all in one place.</p></div><div class="summary-grid participant-summary"><div class="summary"><label>Event Dates</label><strong data-detail-field="date"></strong></div><div class="summary"><label>Check-in</label><strong data-detail-field="checkin-status">Not Checked In</strong></div><div class="summary"><label>Venue</label><strong data-detail-field="venue-short"></strong></div></div><div class="content-grid participant-registered-content"><section class="section"><h2>Event schedule</h2><div class="list" data-detail-schedule></div><button class="button participant-public-button" data-participant-action="view-public-details">View Event Details →</button></section><section class="section"><h2>Your access pass</h2><div class="participant-pass"><span class="participant-pass__label">EventFlow participant</span><h2 data-pass-field="participant"></h2><p><span data-pass-field="event"></span> · <span data-pass-field="category"></span></p><span class="participant-pass__event" data-pass-field="location"></span><span class="participant-pass__code">Registered ✓</span></div></section></div><section class="participant-qr-section"><p class="eyebrow">Event check-in</p><h2>Show this QR code at the entrance.</h2><div id="participantQrContainer" class="participant-qr-canvas" aria-label="QR code for event check-in"></div><p class="qr-token-label" data-qr-token-display></p><p>Your QR code is unique to this registration. Present it to the volunteer at the entrance to check in.</p></section></div>
+  </template>
+  <template id="scheduleItemTemplate"><div class="list-row"><div><strong data-schedule-field="title"></strong><small data-schedule-field="meta"></small></div></div></template>
+  <!-- Volunteer QR Scanner Template -->
+  <template id="volunteerScannerTemplate">
+    <div class="role-main volunteer-scanner-main">
+      <button class="back-link" data-action="close-scanner">← Back to Dashboard</button>
+      <div class="scanner-shell">
+        <span class="scanner-shell__shape scanner-shell__shape--one" aria-hidden="true"></span>
+        <span class="scanner-shell__shape scanner-shell__shape--two" aria-hidden="true"></span>
+        <div class="scanner-header">
+          <span class="scanner-icon" aria-hidden="true">⬡</span>
+          <div>
+            <p class="eyebrow">Volunteer tool</p>
+            <h1>Scan Participant QR</h1>
+            <p>Point the camera at the participant's QR code. The system will automatically update their attendance.</p>
+          </div>
+        </div>
+        <div class="scanner-viewport">
+          <div id="qr-reader"></div>
+          <div class="scanner-result" id="scannerResult" hidden>
+            <div class="scanner-result__icon" id="scannerResultIcon">✓</div>
+            <div class="scanner-result__body">
+              <strong id="scannerResultTitle"></strong>
+              <span id="scannerResultSub"></span>
+            </div>
+          </div>
+        </div>
+        <div class="scanner-log">
+          <p class="eyebrow">Recent scans this session</p>
+          <div class="scanner-log-list" id="scannerLogList"><p class="scanner-log-empty">No scans yet. Start scanning to see results here.</p></div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/role-dashboard.js?v=20260811_feedback_submit"></script>
+</body>
+</html>

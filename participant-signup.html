@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Create an EventFlow participant account.">
+  <title>Join EventFlow — Participant</title>
+  <link rel="stylesheet" href="css/auth.css?v=20260805_v3">
+</head>
+<body>
+  <main class="auth-page">
+    <section class="auth-card" aria-labelledby="participantTitle">
+      <a href="index.html" class="auth-brand" aria-label="EventFlow home"><span class="auth-brand__mark" aria-hidden="true"></span><span>EventFlow</span></a>
+      <div class="auth-heading"><p class="auth-eyebrow">PARTICIPANT ACCOUNT</p><h1 id="participantTitle">Discover events<span>.</span></h1><p>Create your account to search public events, register, and keep all your event passes in one place.</p></div>
+      <form class="auth-form" id="participantSignupForm" novalidate>
+        <div class="field-group"><label for="participantName">Full name</label><input id="participantName" type="text" autocomplete="name" placeholder="Your full name"><p class="field-error"></p></div>
+        <div class="field-group"><label for="participantEmail">Email</label><input id="participantEmail" type="email" autocomplete="email" placeholder="you@example.com"><p class="field-error"></p></div>
+        <div class="field-group"><label for="participantPassword">Password</label><div class="password-wrap"><input id="participantPassword" type="password" autocomplete="new-password" placeholder="At least 8 characters"><button type="button" class="password-toggle" id="passwordToggle" aria-label="Show password"><span aria-hidden="true">◉</span></button></div><div class="pw-strength" id="pwStrength" aria-live="polite"><div class="pw-bar"><span class="pw-bar__seg" id="pwSeg1"></span><span class="pw-bar__seg" id="pwSeg2"></span><span class="pw-bar__seg" id="pwSeg3"></span><span class="pw-bar__seg" id="pwSeg4"></span></div><ul class="pw-rules"><li class="pw-rule" id="rule-len"><span class="pw-rule__dot">✓</span>8+ characters</li><li class="pw-rule" id="rule-upper"><span class="pw-rule__dot">✓</span>Uppercase letter</li><li class="pw-rule" id="rule-lower"><span class="pw-rule__dot">✓</span>Lowercase letter</li><li class="pw-rule" id="rule-num"><span class="pw-rule__dot">✓</span>Number</li><li class="pw-rule" id="rule-special"><span class="pw-rule__dot">✓</span>Special character</li></ul></div><p class="field-error"></p></div>
+        <div class="field-group"><label for="participantConfirmPassword">Confirm password</label><input id="participantConfirmPassword" type="password" autocomplete="new-password" placeholder="Repeat your password"><p class="field-error"></p></div>
+        <button class="auth-button auth-button--blue" id="participantSignupButton" type="submit">Create participant account <span>→</span></button>
+        <div class="auth-divider">or continue with</div>
+        <button class="google-button" id="participantGoogleButton" type="button"><span class="google-mark">G</span> Continue with Google</button>
+        <p class="auth-status" id="participantSignupStatus" role="status" aria-live="polite"></p>
+      </form>
+      <p class="auth-footer">Already have an account? <a href="participant-login.html">Sign in as a participant</a></p>
+    </section>
+  </main>
+  <script src="js/firebase-config.js"></script><script src="js/participant-signup.js"></script>
+</body>
+</html>

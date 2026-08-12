@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Join an EventFlow volunteer workspace.">
+  <title>Join as a Volunteer — EventFlow</title>
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+  <main class="auth-page">
+    <section class="auth-card" aria-labelledby="authTitle">
+      <a href="index.html" class="auth-brand" aria-label="EventFlow home"><span class="auth-brand__mark" aria-hidden="true"></span><span>EventFlow</span></a>
+      <div id="signupPanel">
+        <div class="auth-heading"><p class="auth-eyebrow">Volunteer invitation</p><h1 id="authTitle">Join the <span>team.</span></h1><p>Create your account and go straight to your event workspace to view assignments and share progress.</p></div>
+        <div class="invite-context" id="inviteContext">Checking your invitation and volunteer roster…</div>
+        <form class="auth-form" id="volunteerSignupForm" novalidate>
+          <div class="field-group"><label for="volunteerName">Full name</label><input id="volunteerName" type="text" placeholder="Your full name" autocomplete="name"><p class="field-error"></p></div>
+          <div class="field-group"><label for="volunteerEmail">Invited email</label><input id="volunteerEmail" type="email" placeholder="The email added by your admin" autocomplete="email"><p class="field-error"></p></div>
+          <div class="field-group"><label for="volunteerPassword">Password</label><div class="password-wrap"><input id="volunteerPassword" type="password" placeholder="At least 8 characters" autocomplete="new-password"><button type="button" class="password-toggle" id="passwordToggle" aria-label="Show password"><span aria-hidden="true">◉</span></button></div><div class="pw-strength" id="pwStrength" aria-live="polite"><div class="pw-bar"><span class="pw-bar__seg" id="pwSeg1"></span><span class="pw-bar__seg" id="pwSeg2"></span><span class="pw-bar__seg" id="pwSeg3"></span><span class="pw-bar__seg" id="pwSeg4"></span></div><ul class="pw-rules"><li class="pw-rule" id="rule-len"><span class="pw-rule__dot">✓</span>8+ characters</li><li class="pw-rule" id="rule-upper"><span class="pw-rule__dot">✓</span>Uppercase letter</li><li class="pw-rule" id="rule-lower"><span class="pw-rule__dot">✓</span>Lowercase letter</li><li class="pw-rule" id="rule-num"><span class="pw-rule__dot">✓</span>Number</li><li class="pw-rule" id="rule-special"><span class="pw-rule__dot">✓</span>Special character</li></ul></div><p class="field-error"></p></div>
+          <div class="field-group"><label for="volunteerConfirmPassword">Confirm password</label><input id="volunteerConfirmPassword" type="password" placeholder="Repeat your password" autocomplete="new-password"><p class="field-error"></p></div>
+          <button class="auth-button auth-button--blue" type="submit">Create volunteer account <span>→</span></button>
+          <div class="auth-divider">or continue with</div>
+          <button class="google-button" type="button" id="volunteerGoogleButton"><span class="google-mark">G</span> Continue with Google</button>
+          <p class="auth-status" id="signupStatus" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+      <p class="auth-footer">Already have an account? <a href="team-login.html">Sign in to team workspace</a></p>
+    </section>
+  </main>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/volunteer-signup.js?v=20260807_invite_roster"></script>
+</body>
+</html>

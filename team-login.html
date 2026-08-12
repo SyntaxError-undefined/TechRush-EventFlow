@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sign in to your EventFlow team workspace.">
+  <title>Team Login — EventFlow</title>
+  <link rel="stylesheet" href="css/auth.css?v=20260806_split_login">
+</head>
+<body data-login-scope="team">
+  <main class="auth-page">
+    <section class="auth-card" aria-labelledby="authTitle">
+      <a href="index.html" class="auth-brand" aria-label="EventFlow home"><span class="auth-brand__mark" aria-hidden="true"></span><span>EventFlow</span></a>
+      <div class="auth-heading"><p class="auth-eyebrow">TEAM LOGIN</p><h1 id="authTitle">Welcome back<span>.</span></h1><p id="loginDescription">Sign in to manage your organisation, events, and team assignments.</p></div>
+      <form class="auth-form" id="loginForm" novalidate>
+        <div class="field-group"><label for="loginEmail">Work email</label><input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com"><p class="field-error"></p></div>
+        <div class="field-group"><label for="loginPassword">Password</label><div class="password-wrap"><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Enter your password"><button type="button" class="password-toggle" id="passwordToggle" aria-label="Show password"><svg class="eye-icon eye-icon--open" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="2.75" stroke="currentColor" stroke-width="1.5"/></svg><svg class="eye-icon eye-icon--closed" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 3L21 21M10.6 5.8C11.05 5.6 11.52 5.5 12 5.5 18 5.5 21.5 12 21.5 12S20.2 14.4 18.1 16.1M6.3 6.8C3.8 8.6 2.5 12 2.5 12S6 18.5 12 18.5c1.1 0 2.1-.2 3-.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><p class="field-error"></p></div>
+        <div class="auth-links"><a href="#" id="forgotPasswordLink">Forgot password?</a><span>Securely powered by Firebase</span></div>
+        <button class="auth-button auth-button--blue" type="submit">Sign in to team workspace <span>→</span></button>
+        <p class="auth-status" id="loginStatus" role="status" aria-live="polite"></p>
+        <div class="auth-divider"><span>or</span></div>
+        <button class="google-button" type="button" id="googleLoginButton"><span class="google-mark">G</span> Continue with Google</button>
+        <p class="auth-footer">Need an organisation account? <a href="register-admin.html">Create your organisation</a><br>Have a volunteer invitation? <a href="volunteer-signup.html">Join your team</a><br>Joining an event instead? <a href="participant-login.html">Participant login</a></p>
+      </form>
+      <form class="auth-panel" id="resetPanel" hidden novalidate><button type="button" class="auth-panel__back" id="backToLogin">← Back to login</button><div class="auth-heading"><p class="auth-eyebrow">PASSWORD RESET</p><h1>Reset access<span>.</span></h1><p>We’ll send a secure reset link to your email.</p></div><div class="field-group"><label for="resetEmail">Email</label><input id="resetEmail" type="email" autocomplete="email" placeholder="you@example.com"><p class="field-error"></p></div><button class="auth-button" type="submit">Send Reset Link <span>→</span></button><p class="auth-status" id="resetStatus" role="status" aria-live="polite"></p></form>
+    </section>
+  </main>
+  <script src="js/firebase-config.js"></script><script src="js/login.js?v=20260807_volunteer_access"></script>
+</body>
+</html>

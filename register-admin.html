@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Create your EventFlow organization.">
+  <title>Create Organization — EventFlow</title>
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+  <main class="auth-page">
+    <section class="auth-card" aria-labelledby="auth-title">
+      <a href="index.html" class="auth-brand" aria-label="EventFlow home"><span class="auth-brand__mark" aria-hidden="true"></span><span>EventFlow</span></a>
+      <div class="auth-heading">
+        <p class="auth-eyebrow">Admin onboarding</p>
+        <h1 id="auth-title">Create your <span>organization.</span></h1>
+        <p>Set up your EventFlow workspace and start managing events, teams, and registrations.</p>
+      </div>
+      <form class="auth-form" id="registerForm" novalidate>
+        <div class="field-group"><label for="adminName">Admin name</label><input id="adminName" type="text" placeholder="Your full name" autocomplete="name"><p class="field-error"></p></div>
+        <div class="field-group"><label for="collegeName">College or organization</label><input id="collegeName" type="text" placeholder="Your college or organization name" autocomplete="organization"><p class="field-error"></p></div>
+        <div class="field-group"><label for="organizationName">Club or event organization</label><input id="organizationName" type="text" placeholder="ACM Student Chapter, Events Club…" autocomplete="organization"><p class="field-error"></p></div>
+        <div class="field-group"><label for="registerEmail">Email</label><input id="registerEmail" type="email" placeholder="you@example.com" autocomplete="email"><p class="field-error"></p></div>
+        <div class="field-group"><label for="registerPassword">Password</label><div class="password-wrap"><input id="registerPassword" type="password" placeholder="At least 8 characters" autocomplete="new-password"><button type="button" class="password-toggle" id="passwordToggle" aria-label="Show password"><span aria-hidden="true">◉</span></button></div><div class="pw-strength" id="pwStrength" aria-live="polite"><div class="pw-bar"><span class="pw-bar__seg" id="pwSeg1"></span><span class="pw-bar__seg" id="pwSeg2"></span><span class="pw-bar__seg" id="pwSeg3"></span><span class="pw-bar__seg" id="pwSeg4"></span></div><ul class="pw-rules"><li class="pw-rule" id="rule-len"><span class="pw-rule__dot">✓</span>8+ characters</li><li class="pw-rule" id="rule-upper"><span class="pw-rule__dot">✓</span>Uppercase letter</li><li class="pw-rule" id="rule-lower"><span class="pw-rule__dot">✓</span>Lowercase letter</li><li class="pw-rule" id="rule-num"><span class="pw-rule__dot">✓</span>Number</li><li class="pw-rule" id="rule-special"><span class="pw-rule__dot">✓</span>Special character</li></ul></div><p class="field-error"></p></div>
+        <div class="field-group"><label for="confirmPassword">Confirm password</label><input id="confirmPassword" type="password" placeholder="Repeat your password" autocomplete="new-password"><p class="field-error"></p></div>
+        <button class="auth-button" id="registerButton" type="submit">Create organization <span>→</span></button>
+        <div class="auth-divider">or continue with</div>
+        <button class="google-button" id="registerGoogleButton" type="button"><span class="google-mark">G</span> Continue with Google</button>
+        <p class="auth-status" id="registerStatus" role="status" aria-live="polite"></p>
+      </form>
+      <p class="auth-footer">Already have an account? <a href="team-login.html">Sign in to team workspace</a></p>
+    </section>
+  </main>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/register.js"></script>
+</body>
+</html>

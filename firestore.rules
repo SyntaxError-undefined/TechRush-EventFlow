@@ -1,0 +1,167 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function ownsOrganization(organizationId) {
+      return signedIn()
+        && organizationId is string
+        && exists(/databases/$(database)/documents/organizations/$(organizationId))
+        && get(/databases/$(database)/documents/organizations/$(organizationId)).data.ownerUid == request.auth.uid;
+    }
+
+    function canCreateEvent() {
+      return isAdmin()
+        || ownsOrganization(request.resource.data.organizationId);
+    }
+
+    function canUpdateEvent(eventId) {
+      return isAdmin()
+        || ownsOrganization(request.resource.data.organizationId)
+        || (exists(/databases/$(database)/documents/events/$(eventId))
+          && get(/databases/$(database)/documents/events/$(eventId)).data.createdBy == request.auth.uid);
+    }
+
+    function canDeleteEvent(eventId) {
+      return isAdmin()
+        || (exists(/databases/$(database)/documents/events/$(eventId))
+          && ownsOrganization(get(/databases/$(database)/documents/events/$(eventId)).data.organizationId))
+        || (exists(/databases/$(database)/documents/events/$(eventId))
+          && get(/databases/$(database)/documents/events/$(eventId)).data.createdBy == request.auth.uid);
+    }
+
+    // ── Volunteer role helper ─────────────────────────────────────────────
+    function isVolunteer() {
+      return signedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'volunteer';
+    }
+
+    match /users/{userId} {
+      allow create: if signedIn() && request.auth.uid == userId
+        && (request.resource.data.role == 'admin'
+          || request.resource.data.role == 'participant'
+          || (request.resource.data.role == 'volunteer'
+            && request.resource.data.email == request.auth.token.email
+            && exists(/databases/$(database)/documents/volunteerInvites/$(request.resource.data.inviteId))));
+      allow read, update: if signedIn() && request.auth.uid == userId;
+    }
+
+    match /volunteerInvites/{inviteId} {
+      // The invitation URL is a capability link. It only exposes the pending
+      // roster for that event; account creation is still restricted to the
+      // authenticated email matching an invited address.
+      allow get: if resource.data.status == 'pending';
+      allow create, update: if isAdmin();
+    }
+
+    match /organizations/{organizationId} {
+      allow create: if signedIn() && request.auth.uid == request.resource.data.ownerUid;
+      allow read, update: if isAdmin();
+    }
+
+    match /events/{eventId} {
+      // Participants can only discover events an admin marked public.
+      // Volunteers need read access to lookup event details during check-in.
+      allow read: if isAdmin() || isVolunteer() || resource.data.visibility == 'public';
+      allow create: if canCreateEvent();
+      allow update: if canUpdateEvent(eventId);
+      allow delete: if canDeleteEvent(eventId);
+
+      match /participants/{participantId} {
+        allow create: if signedIn() && request.auth.uid == participantId
+          && get(/databases/$(database)/documents/events/$(eventId)).data.visibility == 'public';
+        allow read: if isAdmin() || isVolunteer() || (signedIn() && request.auth.uid == participantId);
+        allow update, delete: if isAdmin();
+      }
+
+      match /volunteers/{volunteerId} {
+        allow read: if isAdmin() || (signedIn() && resource.data.email == request.auth.token.email);
+        allow create, update, delete: if isAdmin();
+      }
+    }
+
+    match /participantRegistrations/{registrationId} {
+      allow create: if signedIn() && request.auth.uid == request.resource.data.participantId
+        && get(/databases/$(database)/documents/events/$(request.resource.data.eventId)).data.visibility == 'public';
+      // Volunteers need read access to look up registrations during QR scanning
+      allow read: if isAdmin() || isVolunteer()
+        || (signedIn() && resource.data.participantId == request.auth.uid);
+      // Allow participants to update their own doc (e.g. to backfill qrToken)
+      // Allow volunteers to update attendance fields only
+      allow update: if isAdmin()
+        || (signedIn() && resource.data.participantId == request.auth.uid)
+        || (isVolunteer()
+          && request.resource.data.diff(resource.data).affectedKeys()
+              .hasOnly(['status', 'attendance', 'checkedInAt', 'checkInTime', 'checkOutTime', 'volunteerId', 'volunteerName']));
+      allow delete: if isAdmin();
+    }
+
+    match /tasks/{taskId} {
+      allow read: if isAdmin()
+        || (signedIn() && resource.data.assignedEmail == request.auth.token.email);
+      allow update: if isAdmin()
+        || (signedIn()
+          && resource.data.assignedEmail == request.auth.token.email
+          && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['completed', 'completedAt', 'updatedAt']));
+      allow create, delete: if isAdmin();
+    }
+
+    match /progressReports/{reportId} {
+      allow create: if signedIn() && request.auth.uid == request.resource.data.volunteerId;
+      allow read: if isAdmin() || (signedIn() && resource.data.volunteerId == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    // ── QR Check-In / Check-Out collection ───────────────────────────────
+    // Doc ID = qrToken (UUID). Created by the participant who registers.
+    // Read and updated by any signed-in volunteer (status transitions only).
+    match /registrations/{registrationId} {
+      // Participants can create their own registration docs
+      allow create: if signedIn()
+        && request.auth.uid == request.resource.data.participantId;
+
+      // Participants can read their own docs; admins and volunteers can read all.
+      // Volunteers MUST be able to read the doc first to check current status
+      // before they can perform a check-in or check-out update.
+      allow read: if isAdmin()
+        || isVolunteer()
+        || (signedIn() && resource.data.participantId == request.auth.uid);
+
+      // Volunteers can update status + timestamps only (not participantId / email).
+      // Admins can update anything.
+      allow update: if isAdmin()
+        || (isVolunteer()
+          && request.resource.data.diff(resource.data).affectedKeys()
+              .hasOnly(['status', 'checkInTime', 'checkOutTime', 'volunteerId', 'volunteerName']));
+
+      allow delete: if isAdmin();
+    }
+
+    // One post-checkout response per participant and event. Participants may
+    // submit their own response; event admins can read it for reporting.
+    match /eventFeedback/{feedbackId} {
+      allow create: if signedIn()
+        && request.resource.data.participantId == request.auth.uid
+        && get(/databases/$(database)/documents/events/$(request.resource.data.eventId)).data.visibility == 'public';
+      allow read: if isAdmin()
+        || (signedIn() && resource.data.participantId == request.auth.uid);
+      // A participant may safely retry or correct their own response. They
+      // cannot transfer ownership of an existing feedback document.
+      allow update: if isAdmin()
+        || (signedIn()
+          && resource.data.participantId == request.auth.uid
+          && request.resource.data.participantId == resource.data.participantId
+          && request.resource.data.eventId == resource.data.eventId);
+      allow delete: if isAdmin();
+    }
+  }
+}

@@ -1,0 +1,464 @@
+/* ============================================================
+   QR CHECK-IN SYSTEM — Extended Styles
+   Appended to role-dashboard.css & admin.css via separate file
+   Sourced by role-dashboard.html and admin.html
+   ============================================================ */
+
+/* ── Participant QR canvas ────────────────────────────────── */
+.participant-qr-canvas {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 24px auto;
+  width: 320px;
+  height: 320px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 32px rgba(0,0,0,.22), 0 0 0 1px rgba(255,255,255,.06);
+  padding: 0;
+  position: relative;
+}
+
+/* Show the img (crisp PNG), hide the canvas (DPI issues on retina) */
+.participant-qr-canvas canvas {
+  display: none !important;
+}
+
+.participant-qr-canvas img {
+  display: block !important;
+  width: 280px !important;
+  height: 280px !important;
+  border-radius: 10px;
+  image-rendering: crisp-edges;
+}
+
+.qr-generating {
+  font-size: 13px;
+  color: var(--muted, #94a3b8);
+  text-align: center;
+  padding: 20px;
+}
+
+.qr-token-label {
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: var(--muted, #64748b);
+  margin: 4px 0 16px;
+  font-family: 'Courier New', monospace;
+}
+
+/* ── Volunteer scanner banner ─────────────────────────────── */
+.volunteer-scanner-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: var(--surface-alt, #fffaf5);
+  border: 1px solid var(--border, #eadfd4);
+  border-radius: 20px;
+  padding: 22px 28px;
+  margin: 0 0 28px;
+  box-shadow: 0 14px 30px rgba(89, 65, 42, .08);
+}
+
+.scanner-banner-copy {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.scanner-banner-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+  color: var(--coral, #e76f51);
+  opacity: 1;
+}
+
+.volunteer-scanner-banner h2 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: var(--text, #0d1117);
+}
+
+.volunteer-scanner-banner p {
+  font-size: 13px;
+  color: var(--muted, #94a3b8);
+  margin: 0;
+}
+
+.button--scanner {
+  background: var(--coral, #e76f51);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: opacity .2s, transform .15s;
+  box-shadow: 0 8px 20px rgba(231, 111, 81, .22);
+}
+
+.button--scanner:hover {
+  background: var(--deep-teal, #264653);
+  opacity: 1;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(38, 70, 83, .24);
+}
+
+/* ── Volunteer scanner screen ─────────────────────────────── */
+.volunteer-scanner-main {
+  position: relative;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 42px 0 80px;
+}
+
+.scanner-shell {
+  position: relative;
+  isolation: isolate;
+  background: var(--surface, #ffffff);
+  border: 1px solid var(--border, #eadfd4);
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow: 0 22px 48px rgba(89, 65, 42, .12);
+}
+
+.scanner-shell__shape { position: absolute; z-index: -1; pointer-events: none; }
+.scanner-shell__shape--one { top: -105px; right: -86px; width: 265px; height: 230px; border-radius: 47% 53% 61% 39% / 43% 48% 52% 57%; background: var(--yellow, #e9c46a); transform: rotate(-22deg); }
+.scanner-shell__shape--two { right: 112px; bottom: -122px; width: 220px; height: 195px; border: 1px solid rgba(42, 157, 143, .45); border-radius: 50%; transform: rotate(28deg); }
+
+.scanner-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+  padding: 38px 42px 30px;
+  border-bottom: 1px solid var(--border, #eadfd4);
+}
+
+.scanner-icon {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 17px;
+  color: #fff;
+  background: var(--deep-teal, #264653);
+  box-shadow: 0 10px 20px rgba(38, 70, 83, .19);
+  font-size: 31px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.scanner-header h1 {
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 800;
+  letter-spacing: -.065em;
+  margin: 0 0 9px;
+  color: var(--text, #0d1117);
+}
+
+.scanner-header p {
+  max-width: 510px;
+  font-size: 14px;
+  color: var(--muted, #54606a);
+  margin: 0;
+  line-height: 1.5;
+}
+.scanner-header .eyebrow { margin-bottom: 10px; color: var(--teal, #2a9d8f); font-size: 11px; }
+
+/* ── html5-qrcode overrides ───────────────────────────────── */
+.scanner-viewport {
+  position: relative;
+  z-index: 1;
+  padding: 30px 42px 34px;
+  background: linear-gradient(135deg, rgba(42, 157, 143, .07), rgba(255, 250, 245, .75));
+}
+
+#qr-reader {
+  border: 1px solid var(--border, #eadfd4) !important;
+  border-radius: 17px;
+  overflow: hidden;
+  background: #fff !important;
+  box-shadow: 0 10px 24px rgba(89, 65, 42, .10);
+}
+
+#qr-reader video {
+  border-radius: 10px;
+}
+
+#qr-reader__scan_region {
+  background: var(--cream-deep, #f7eee5) !important;
+}
+
+#qr-reader__dashboard {
+  color: var(--text, #0d1117) !important;
+  background: #fffaf5 !important;
+  padding: 15px !important;
+  border-top: 1px solid var(--border, #eadfd4) !important;
+}
+
+#qr-reader__dashboard button {
+  background: var(--coral, #e76f51) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 9px !important;
+  padding: 8px 16px !important;
+  font-size: 13px !important;
+  cursor: pointer !important;
+}
+
+/* ── Scan result banner ───────────────────────────────────── */
+.scanner-result {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-radius: 14px;
+  padding: 18px 22px;
+  margin-top: 16px;
+  animation: scanBannerIn .25s ease;
+}
+
+@keyframes scanBannerIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.scanner-result--success {
+  background: rgba(42, 157, 143, .12);
+  border: 1.5px solid rgba(42, 157, 143, .38);
+}
+
+.scanner-result--checkout {
+  background: rgba(233, 196, 106, .20);
+  border: 1.5px solid rgba(202, 159, 54, .45);
+}
+
+.scanner-result--error {
+  background: rgba(231, 111, 81, .10);
+  border: 1.5px solid rgba(231, 111, 81, .38);
+}
+
+.scanner-result__icon {
+  font-size: 28px;
+  font-weight: 900;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scanner-result--success .scanner-result__icon { background: rgba(42, 157, 143, .16); color: var(--teal, #2a9d8f); }
+.scanner-result--checkout .scanner-result__icon { background: rgba(233, 196, 106, .28); color: #8c6818; }
+.scanner-result--error   .scanner-result__icon { background: rgba(231, 111, 81, .14); color: var(--coral, #e76f51); }
+
+.scanner-result__body strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+
+.scanner-result__body span {
+  font-size: 12px;
+  color: var(--muted, #54606a);
+}
+
+/* ── Scan log ─────────────────────────────────────────────── */
+.scanner-log {
+  position: relative;
+  z-index: 1;
+  padding: 27px 42px 38px;
+  border-top: 1px solid var(--border, #eadfd4);
+  background: rgba(255, 250, 245, .58);
+}
+
+.scanner-log .eyebrow {
+  font-size: 10px;
+  letter-spacing: .12em;
+  color: var(--teal, #2a9d8f);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.scanner-log-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.scanner-log-empty {
+  font-size: 13px;
+  color: var(--muted, #54606a);
+  padding: 12px 0;
+  margin: 0;
+}
+
+.scan-log-entry {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid var(--border, #eadfd4);
+  border-radius: 12px;
+  padding: 10px 14px;
+  animation: scanLogIn .2s ease;
+}
+
+@keyframes scanLogIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.scan-log-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.scan-log-entry--checked-in .scan-log-icon { background: rgba(42, 157, 143, .15); color: var(--teal, #2a9d8f); }
+.scan-log-entry--checked-out .scan-log-icon { background: rgba(233, 196, 106, .27); color: #8c6818; }
+.scan-log-entry--invalid .scan-log-icon { background: rgba(231, 111, 81, .13); color: var(--coral, #e76f51); }
+
+.scan-log-entry div {
+  flex: 1;
+  min-width: 0;
+}
+
+.scan-log-entry div strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scan-log-entry div small {
+  font-size: 11px;
+  color: var(--muted, #54606a);
+}
+
+.scan-log-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.scan-log-badge--checked-in  { background: rgba(42, 157, 143, .13); color: var(--teal, #2a9d8f); }
+.scan-log-badge--checked-out { background: rgba(233, 196, 106, .25); color: #8c6818; }
+.scan-log-badge--invalid     { background: rgba(231, 111, 81, .12); color: var(--coral, #e76f51); }
+
+@media (max-width: 700px) {
+  .volunteer-scanner-banner { align-items: flex-start; flex-direction: column; padding: 20px; }
+  .button--scanner { width: 100%; }
+  .volunteer-scanner-main { padding: 28px 0 56px; }
+  .scanner-shell { border-radius: 19px; }
+  .scanner-header { gap: 14px; padding: 26px 22px 23px; }
+  .scanner-icon { width: 45px; height: 45px; border-radius: 13px; font-size: 25px; }
+  .scanner-header h1 { font-size: 28px; }
+  .scanner-viewport { padding: 20px 16px 24px; }
+  .scanner-log { padding: 23px 20px 28px; }
+  .scan-log-entry { align-items: flex-start; padding: 10px; }
+  .scan-log-badge { margin-left: auto; }
+}
+
+/* ── Admin: Live Check-ins Dashboard ─────────────────────── */
+.checkin-live-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: #10b981;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.checkin-live-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 0 rgba(16,185,129,.5);
+  animation: livePulse 1.8s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes livePulse {
+  0%   { box-shadow: 0 0 0 0 rgba(16,185,129,.5); }
+  70%  { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+  100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+}
+
+/* Extended stat cards for check-in view */
+.stat--live {
+  position: relative;
+  overflow: hidden;
+}
+
+.stat--success strong { color: #10b981; }
+.stat--info    strong { color: #818cf8; }
+.stat--warn    strong { color: #f59e0b; }
+.stat--accent  strong { color: #38bdf8; }
+
+.attendance-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255,255,255,.08);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.attendance-track span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #10b981);
+  border-radius: 2px;
+  transition: width .6s ease;
+}
+
+/* ── Admin scanner modal result banner ───────────────────── */
+.admin-scan-result {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-top: 14px;
+  animation: scanBannerIn .25s ease;
+}
+
+.admin-scan-result--success  { background: rgba(16,185,129,.18);  border: 1.5px solid rgba(16,185,129,.4); }
+.admin-scan-result--checkout { background: rgba(99,102,241,.15);  border: 1.5px solid rgba(99,102,241,.4); }
+.admin-scan-result--error    { background: rgba(239,68,68,.15);   border: 1.5px solid rgba(239,68,68,.4); }
+
+/* html5-qrcode overrides inside admin modal */
+#adminQrReader video { border-radius: 8px; }
+#adminQrReader__scan_region { background: #0f172a !important; }
+#adminQrReader__dashboard { background: #1e293b !important; padding: 10px !important; }
+#adminQrReader__dashboard button {
+  background: #6366f1 !important; color: #fff !important;
+  border: none !important; border-radius: 8px !important;
+  padding: 7px 14px !important; cursor: pointer !important;
+}
